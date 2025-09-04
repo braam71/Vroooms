@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 
 export function Checkout() {
-  const { items, getTotalPrice } = useCart();
+  const { items, getTotalPrice, clearCart } = useCart();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -22,10 +23,35 @@ export function Checkout() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with Supabase
-    alert('Order submitted successfully!');
+
+    const orderDetails = items.map(item => ({
+      name: item.product.name,
+      price: (item.product.price_cents / 100).toFixed(2),
+      quantity: 1,
+    }));
+
+    try {
+      const response = await fetch('https://n8n-nw6tmx3tbij1.pempek.sumopod.my.id/webhook/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderDetails),
+      });
+
+      if (response.ok) {
+        alert('Order submitted successfully!');
+        clearCart();
+        navigate('/');
+      } else {
+        alert('There was an issue with your order. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('There was an issue connecting to the payment service. Please try again later.');
+    }
   };
 
   return (
