@@ -1,13 +1,13 @@
 export interface Product {
   id: string;
-  title: string;
-  description: string;
-  price: number;
-  image: string;
-  category: 'digital-art' | 'poster' | 'illustration';
-  tags: string[];
-  dimensions: string;
-  format: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  price_cents: number;
+  image_url: string | null;
+  currency: string;
+  resolution: string | null;
+  format: string | null;
 }
 
 export interface CartItem {

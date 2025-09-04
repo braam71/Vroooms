@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Download, Palette, Tag, Monitor } from 'lucide-react';
-import { products } from '../data/products';
+import { supabase } from '../lib/supabase';
 import { useCart } from '../hooks/useCart';
+import { Product } from '../types';
 
 export function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
+  const [product, setProduct] = useState<Product | null>(null);
 
-  const product = products.find(p => p.id === id);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!id) return;
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching product:', error);
+      } else {
+        setProduct(data);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   if (!product) {
     return (
@@ -43,8 +62,8 @@ export function ProductDetail() {
         <div className="space-y-4">
           <div className="aspect-square bg-gray-800 rounded-2xl overflow-hidden border border-gray-700/50">
             <img
-              src={product.image}
-              alt={product.title}
+              src={product.image_url || ''}
+              alt={product.name}
               className="w-full h-full object-cover"
             />
           </div>
@@ -54,15 +73,15 @@ export function ProductDetail() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3">
-              {product.title}
+              {product.name}
             </h1>
             <div className="flex items-center space-x-4 mb-4">
               <span className="text-3xl font-bold text-yellow-400">
-                ${product.price}
+                ${product.price_cents / 100}
               </span>
-              <span className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm font-medium border border-purple-500/30">
+              {/* <span className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm font-medium border border-purple-500/30">
                 {product.category.replace('-', ' ')}
-              </span>
+              </span> */}
             </div>
           </div>
 
@@ -81,11 +100,11 @@ export function ProductDetail() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/50">
                 <div className="text-sm text-gray-400 mb-1">Dimensions</div>
-                <div className="text-white font-medium">{product.dimensions}</div>
+                <div className="text-white font-medium">{product.resolution || 'N/A'}</div>
               </div>
               <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/50">
                 <div className="text-sm text-gray-400 mb-1">Format</div>
-                <div className="text-white font-medium">{product.format}</div>
+                <div className="text-white font-medium">{product.format || 'N/A'}</div>
               </div>
             </div>
           </div>
@@ -97,14 +116,14 @@ export function ProductDetail() {
               <span>Tags</span>
             </h3>
             <div className="flex flex-wrap gap-2">
-              {product.tags.map(tag => (
+              {/* {product.tags.map(tag => (
                 <span
                   key={tag}
                   className="px-3 py-1.5 bg-gray-700/50 text-gray-300 rounded-lg text-sm border border-gray-600/50"
                 >
                   {tag}
                 </span>
-              ))}
+              ))} */}
             </div>
           </div>
 
@@ -138,11 +157,11 @@ export function ProductDetail() {
             <ul className="space-y-2 text-gray-300">
               <li className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
-                <span>High-resolution digital files ({product.format})</span>
+                <span>High-resolution digital files ({product.format || 'N/A'})</span>
               </li>
               <li className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
-                <span>Print-ready quality at {product.dimensions}</span>
+                <span>Print-ready quality at {product.resolution || 'N/A'}</span>
               </li>
               <li className="flex items-center space-x-2">
                 <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>

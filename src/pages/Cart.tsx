@@ -45,45 +45,38 @@ export function Cart() {
             <div className="flex flex-col sm:flex-row gap-6">
               <div className="w-full sm:w-32 h-32 bg-gray-700 rounded-lg overflow-hidden">
                 <img
-                  src={item.product.image}
-                  alt={item.product.title}
+                  src={item.product.image_url || ''}
+                  alt={item.product.name}
                   className="w-full h-full object-cover"
                 />
+              </div>
+
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-white mb-1">
+                    {item.product.name}
+                  </h2>
+                  <p className="text-gray-400 text-sm">
+                    Digital Asset
+                  </p>
+                </div>
+                <div className="text-lg font-bold text-yellow-400 mt-2 sm:mt-0">
+                  ${(item.product.price_cents / 100).toFixed(2)}
+                </div>
               </div>
 
               <div className="flex-1 space-y-4">
                 <div>
                   <h3 className="text-xl font-semibold text-white">
-                    {item.product.title}
+                    {item.product.name}
                   </h3>
                   <p className="text-gray-400 text-sm">
                     {item.product.description.substring(0, 100)}...
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <button
-                      onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                      className="w-8 h-8 bg-gray-700 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors"
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <span className="text-white font-medium w-8 text-center">
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                      className="w-8 h-8 bg-gray-700 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-
+                <div className="flex items-center justify-end">
                   <div className="flex items-center space-x-4">
-                    <span className="text-yellow-400 font-bold text-lg">
-                      ${item.product.price * item.quantity}
-                    </span>
                     <button
                       onClick={() => removeFromCart(item.product.id)}
                       className="text-red-400 hover:text-red-300 transition-colors"
@@ -102,7 +95,7 @@ export function Cart() {
       <div className="mt-8 bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
         <div className="flex items-center justify-between text-xl font-bold text-white mb-6">
           <span>Total</span>
-          <span className="text-yellow-400">${getTotalPrice()}</span>
+          <span className="text-yellow-400">${getTotalPrice().toFixed(2)}</span>
         </div>
         
         <div className="space-y-3">

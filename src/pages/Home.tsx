@@ -1,19 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Filter, Mail } from 'lucide-react';
 import { ProductCard } from '../components/ProductCard';
-import { products } from '../data/products';
+import { supabase } from '../lib/supabase';
+import { Product } from '../types';
 
 export function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from('products').select('*');
+      if (error) {
+        console.error('Error fetching products:', error);
+      } else {
+        setProducts(data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    // const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   return (

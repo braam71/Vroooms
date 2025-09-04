@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Mail, User, MapPin, Lock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 
 export function Checkout() {
@@ -146,7 +146,7 @@ export function Checkout() {
               className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center space-x-2"
             >
               <Lock className="h-5 w-5" />
-              <span>Complete Purchase - ${getTotalPrice()}</span>
+              <span>Complete Purchase - ${getTotalPrice().toFixed(2)}</span>
             </button>
           </form>
         </div>
@@ -158,12 +158,9 @@ export function Checkout() {
           <div className="space-y-4">
             {items.map(item => (
               <div key={item.product.id} className="flex justify-between items-center">
-                <div>
-                  <div className="text-white font-medium">{item.product.title}</div>
-                  <div className="text-gray-400 text-sm">Qty: {item.quantity}</div>
-                </div>
+                <div className="text-white font-medium">{item.product.name}</div>
                 <div className="text-yellow-400 font-medium">
-                  ${item.product.price * item.quantity}
+                  ${(item.product.price_cents / 100).toFixed(2)}
                 </div>
               </div>
             ))}
@@ -172,7 +169,7 @@ export function Checkout() {
           <div className="border-t border-gray-700/50 mt-6 pt-6">
             <div className="flex justify-between items-center text-xl font-bold">
               <span className="text-white">Total</span>
-              <span className="text-yellow-400">${getTotalPrice()}</span>
+              <span className="text-yellow-400">${getTotalPrice().toFixed(2)}</span>
             </div>
           </div>
 

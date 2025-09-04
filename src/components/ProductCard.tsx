@@ -22,8 +22,8 @@ export function ProductCard({ product }: ProductCardProps) {
       <Link to={`/product/${product.id}`}>
         <div className="relative aspect-square overflow-hidden">
           <img
-            src={product.image}
-            alt={product.title}
+            src={product.image_url || ''}
+            alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -40,10 +40,10 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="p-4">
         <div className="flex items-start justify-between mb-2">
           <h3 className="text-lg font-semibold text-white group-hover:text-yellow-400 transition-colors">
-            {product.title}
+            {product.name}
           </h3>
           <span className="text-yellow-400 font-bold text-lg">
-            ${product.price}
+            ${product.price_cents / 100}
           </span>
         </div>
         
@@ -52,16 +52,6 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
         
         <div className="flex items-center justify-between">
-          <div className="flex flex-wrap gap-1">
-            {product.tags.slice(0, 2).map(tag => (
-              <span
-                key={tag}
-                className="px-2 py-1 bg-gray-700/50 text-gray-300 text-xs rounded-full"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
           
           <button
             onClick={handleAddToCart}
