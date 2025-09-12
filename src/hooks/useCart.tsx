@@ -34,7 +34,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const getTotalPrice = () => {
-    return items.reduce((total, item) => total + (item.product.price_cents / 100), 0);
+    return items.reduce((total, item) => total + item.product.price_cents, 0);
   };
 
   const getTotalItems = () => {

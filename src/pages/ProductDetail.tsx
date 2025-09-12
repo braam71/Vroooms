@@ -77,11 +77,13 @@ export function ProductDetail() {
             </h1>
             <div className="flex items-center space-x-4 mb-4">
               <span className="text-3xl font-bold text-yellow-400">
-                ${product.price_cents / 100}
+                {new Intl.NumberFormat('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                  minimumFractionDigits: 0,
+                }).format(product.price_cents)}
               </span>
-              {/* <span className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm font-medium border border-purple-500/30">
-                {product.category.replace('-', ' ')}
-              </span> */}
+
             </div>
           </div>
 
@@ -109,23 +111,7 @@ export function ProductDetail() {
             </div>
           </div>
 
-          {/* Tags */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-              <Tag className="h-5 w-5 text-yellow-400" />
-              <span>Tags</span>
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {/* {product.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 bg-gray-700/50 text-gray-300 rounded-lg text-sm border border-gray-600/50"
-                >
-                  {tag}
-                </span>
-              ))} */}
-            </div>
-          </div>
+
 
           {/* Purchase Actions */}
           <div className="space-y-4 pt-6 border-t border-gray-700/50">

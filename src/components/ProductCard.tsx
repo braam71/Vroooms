@@ -43,7 +43,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </h3>
           <span className="text-yellow-400 font-bold text-lg">
-            ${product.price_cents / 100}
+            {`IDR ${new Intl.NumberFormat('id-ID').format(product.price_cents)}`}
           </span>
         </div>
         

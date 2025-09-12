@@ -5,6 +5,7 @@ export function Commission() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    whatsapp: '',
     type: '',
     description: '',
     budget: '',
@@ -19,11 +20,27 @@ export function Commission() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would send the commission request to Supabase
-    console.log('Commission request:', formData);
-    setSubmitted(true);
+    try {
+      const response = await fetch('https://n8n-nw6tmx3tbij1.pempek.sumopod.my.id/webhook/d46de1bb-e83b-4d52-80fb-056322549f74', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        console.error('Error submitting commission request:', await response.text());
+        // Handle error appropriately
+      }
+    } catch (error) {
+      console.error('Error submitting commission request:', error);
+      // Handle error appropriately
+    }
   };
 
   if (submitted) {
@@ -127,6 +144,19 @@ export function Commission() {
               />
             </div>
           </div>
+          <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                WhatsApp Number
+              </label>
+              <input
+                type="tel"
+                name="whatsapp"
+                value={formData.whatsapp}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
+              />
+            </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -165,8 +195,7 @@ export function Commission() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center space-x-2">
-                <DollarSign className="h-4 w-4 text-yellow-400" />
-                <span>Budget Range</span>
+                <span>Budget Range (IDR)</span>
               </label>
               <select
                 name="budget"
@@ -176,11 +205,10 @@ export function Commission() {
                 className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
               >
                 <option value="">Select budget range</option>
-                <option value="50-100">$50 - $100</option>
-                <option value="100-250">$100 - $250</option>
-                <option value="250-500">$250 - $500</option>
-                <option value="500-1000">$500 - $1,000</option>
-                <option value="1000+">$1,000+</option>
+                <option value="100k-250k">Rp 100.000 - Rp 250.000</option>
+                <option value="250k-500k">Rp 250.000 - Rp 500.000</option>
+                <option value="500k-1M">Rp 500.000 - Rp 1.000.000</option>
+                <option value="1M+">Over Rp 1.000.000</option>
                 <option value="discuss">Let's discuss</option>
               </select>
             </div>

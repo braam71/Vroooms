@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Minus, Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Trash2, ArrowLeft } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
 
 export function Cart() {
-  const { items, updateQuantity, removeFromCart, getTotalPrice, getTotalItems } = useCart();
+  const { items, removeFromCart, getTotalPrice, getTotalItems } = useCart();
 
   if (items.length === 0) {
     return (
@@ -61,17 +61,14 @@ export function Cart() {
                   </p>
                 </div>
                 <div className="text-lg font-bold text-yellow-400 mt-2 sm:mt-0">
-                  ${(item.product.price_cents / 100).toFixed(2)}
+                  {`IDR ${new Intl.NumberFormat('id-ID').format(item.product.price_cents)}`}
                 </div>
               </div>
 
               <div className="flex-1 space-y-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {item.product.name}
-                  </h3>
                   <p className="text-gray-400 text-sm">
-                    {item.product.description.substring(0, 100)}...
+                    {item.product.description?.substring(0, 100)}...
                   </p>
                 </div>
 
@@ -95,7 +92,13 @@ export function Cart() {
       <div className="mt-8 bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
         <div className="flex items-center justify-between text-xl font-bold text-white mb-6">
           <span>Total</span>
-          <span className="text-yellow-400">${getTotalPrice().toFixed(2)}</span>
+          <span className="text-yellow-400">
+            {new Intl.NumberFormat('id-ID', {
+              style: 'currency',
+              currency: 'IDR',
+              minimumFractionDigits: 0,
+            }).format(getTotalPrice())}
+          </span>
         </div>
         
         <div className="space-y-3">

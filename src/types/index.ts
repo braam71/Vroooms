@@ -6,8 +6,6 @@ export interface Product {
   price_cents: number;
   image_url: string | null;
   currency: string;
-  resolution: string | null;
-  format: string | null;
 }
 
 export interface CartItem {
@@ -20,6 +18,7 @@ export interface Commission {
   description: string;
   budget: string;
   timeline: string;
-  email: string;
   name: string;
+  email: string;
+  whatsapp: string;
 }

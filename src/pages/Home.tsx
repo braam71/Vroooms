@@ -8,7 +8,6 @@ import { Product } from '../types';
 export function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,7 +24,6 @@ export function Home() {
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    // const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     
     return matchesSearch;
   });
@@ -58,20 +56,7 @@ export function Home() {
             className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50 transition-colors"
           />
         </div>
-        
-        <div className="relative">
-          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50 transition-colors appearance-none cursor-pointer"
-          >
-            <option value="all">All Categories</option>
-            <option value="digital-art">Digital Art</option>
-            <option value="illustration">Illustrations</option>
-            <option value="poster">Posters</option>
-          </select>
-        </div>
+
       </div>
 
       {/* Products Grid */}
@@ -90,7 +75,6 @@ export function Home() {
           <button
             onClick={() => {
               setSearchTerm('');
-              setSelectedCategory('all');
             }}
             className="text-yellow-400 hover:text-yellow-300 font-medium transition-colors"
           >
